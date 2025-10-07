@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 :root {
     --primary-color: #A7CEDC; /* Sky blue */
     --secondary-color: #F8D8DA; /* Light pink */
@@ -834,7 +834,7 @@ body {
         padding: 10px 20px;
         font-size: 1em;
     }
-=======
+
 :root {
     --primary-color: #A7CEDC; /* Sky blue */
     --secondary-color: #F8D8DA; /* Light pink */
@@ -1670,5 +1670,5 @@ body {
         padding: 10px 20px;
         font-size: 1em;
     }
->>>>>>> 69d97feac2d9c707897b3a96b84dac7be1b92441
+}
 }
