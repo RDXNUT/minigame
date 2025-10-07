@@ -144,7 +144,6 @@ const gameScenes = {
             {
                 "id": "s3",
                 "text": "ถ้าเธอสามารถเสกสิ่ง ๆ หนึ่งให้ใครสักคน... อยากจะให้อะไร?",
-                "character_pose": "happy",
                 "interaction": {
                     "type": "choices",
                     "choices": [
