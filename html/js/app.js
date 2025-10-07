@@ -48,7 +48,6 @@ const gameScenes = {
             {
                 "id": "s4",
                 "text": "ในขณะที่กำลังเดินสำรวจอยู่นั้น... ดันพบกับ !",
-                "character_pose": "walk",
                 "interaction": {
                     "type": "choices",
                     "choices": [
