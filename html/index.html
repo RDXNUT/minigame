@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Moonlight Bunny Trail - เส้นทางของกระต่ายจันทร์</title>
     <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
@@ -105,116 +105,5 @@
         </div>
     </div>
 
-    <script src="../js/app.js"></script>
+    <script src="js/app.js"></script>
 </body>
-=======
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Moonlight Bunny Trail - เส้นทางของกระต่ายจันทร์</title>
-    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Start Screen -->
-        <div id="start-screen" class="start-screen">
-            <h1>The Moonlight Bunny Trail <br/> — เส้นทางของกระต่ายจันทร์</h1>
-            <p></p>
-            <div class="buttons">
-                <button id="start-new-game">เริ่มเดินทาง</button>
-                <button id="load-game">เล่นต่อจากที่ค้าง</button>
-                <button id="view-answers">ดูคำตอบผู้เล่นทั้งหมด</button>
-            </div>
-            <p class="privacy-note">ข้อมูลที่คุณพิมพ์จะถูกเก็บไว้เฉพาะสำหรับประสบการณ์เกมนี้ คุณสามารถลบได้ตลอดเวลา</p>
-        </div>   
-
-        <!-- Name Input Screen (หน้าจอกรอกชื่อใหม่) -->
-        <div id="name-input-screen" class="name-input-screen hidden">
-            <h2>ยินดีต้อนรับสู่เส้นทางของกระต่ายจันทร์!</h2>
-            <p>ก่อนที่เราจะเริ่มเดินทาง... คุณชื่ออะไร?</p>
-            <input type="text" id="player-name-input" placeholder="พิมพ์ชื่อของคุณที่นี่...">
-            <button id="confirm-name-button">ยืนยัน</button>
-        </div>
-
-        <!-- NEW: Interlude Screen -->
-        <div id="interlude-screen" class="interlude-screen hidden">
-            <h2 id="interlude-title"></h2>
-            <p id="interlude-message"></p>
-            <button id="continue-from-interlude" class="hidden">เดินทางต่อ</button>
-        </div>
-
-        <!-- Game Interface -->
-        <div id="game-interface" class="hidden">
-            <div id="scene-background" class="scene-background"></div>
-            <button id="back-button" class="back-button hidden">⮜</button>
-            <div class="header">
-                <h1 id="current-scene-title"></h1>
-                <div class="relationship-display">
-                    ความใกล้ชิด: <span id="relationship-value">0</span>/100
-                    <div class="progress-bar-container">
-                        <div id="relationship-progress" class="progress-bar"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- สำหรับแสดงตัวละคร -->
-            <div id="character-display" class="character-display">
-                <!-- รูปภาพตัวละครจะถูกแทรกเข้ามาที่นี่โดย JavaScript -->
-            </div>
-            <div id="game-area" class="game-area">
-                <!-- Chat bubbles will be inserted here -->
-            </div>
-            <div class="interaction-area">
-                <div id="choices-container" class="choices-container hidden">
-                    <!-- Choices will be inserted here -->
-                </div>
-                <div id="input-container" class="input-container hidden">
-                    <input type="text" id="open-text-input" placeholder="พิมพ์คำตอบของคุณที่นี่...">
-                    <button id="send-open-text">ส่ง</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- NEW: Final Ending Screen with full image -->
-        <div id="final-ending-screen" class="final-ending-screen hidden">
-            <img id="final-ending-image" src="" alt="พิชิตดวงจันทร์สำเร็จ" class="final-ending-image">
-            <div class="final-ending-overlay">
-                <h2 id="final-ending-title"></h2>
-                <p id="final-ending-message"></p>
-                <div class="buttons">
-                    <button id="export-final-memory">เซฟความทรงจำ</button>
-                    <button id="play-new-final-path">เล่นใหม่อีกครั้ง (New Path)</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ending Screen -->
-        <div id="ending-screen" class="ending-screen hidden">
-            <h2 id="ending-title"></h2>
-            <p id="ending-message"></p>
-            <div class="buttons">
-                <button id="export-memory">เซฟความทรงจำ (Export JSON)</button>
-                <button id="play-new-path">เล่นต่อ (New Path)</button>
-            </div>
-            <pre id="exported-data" class="hidden"></pre>
-        </div>
-    </div>
-
-    <!-- Memory Modal Pop-up -->
-    <div id="memory-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h2>📖 ความทรงจำของเรา</h2>
-            <div id="memory-details-container">
-                <!-- Memory blocks will be inserted here -->
-            </div>
-            <button id="close-memory-modal" class="modal-button">ปิด</button>
-        </div>
-    </div>
-
-    <script src="../js/app.js"></script>
-</body>
->>>>>>> 912c01a7ac144a58a602f23e14a28146fa8d6d07
-</html>
