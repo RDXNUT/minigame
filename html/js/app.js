@@ -188,7 +188,6 @@ const gameScenes = {
             {
                 "id": "s1",
                 "text": "💧 เดินทางมาถึงบ่อน้ำที่สะท้อนแสงจันทร์ บันนี่ดูเหม่อลอยไป",
-                "character_pose": "walk",
                 "interaction": {
                     "type": "choices",
                     "choices": [
@@ -199,7 +198,7 @@ const gameScenes = {
             {
                 "id": "s2",
                 "text": "ฮึก... 😢 ",
-                "character_pose": "beg",
+                "character_pose": "sad",
                 "interaction": {
                     "type": "choices",
                     "choices": [
@@ -211,7 +210,6 @@ const gameScenes = {
             {
                 "id": "s3",
                 "text": "เวลาเธอรู้สึกไม่ดี... เธอปลอบใจตัวเองยังไง?'",
-                "character_pose": "sad",
                 "interaction": {
                     "type": "open_text",
                     "save_as": "free_time",
