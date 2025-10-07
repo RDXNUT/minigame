@@ -1,0 +1,894 @@
+:root {
+    --primary-color: #A7CEDC; /* Sky blue */
+    --secondary-color: #F8D8DA; /* Light pink */
+    --accent-color: #B5EAD7; /* Mint green */
+    --text-color: #4A4A4A;
+    --bubble-bg-player: #E0F7FA; /* Light cyan */
+    --bubble-bg-npc: #FFF9C4; /* Light yellow */
+    --button-hover: #98D8E8;
+    --heart-color: #FF6B6B; /* Red for relationship */
+}
+
+body {
+    font-family: 'Mitr', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom right, var(--primary-color), var(--accent-color));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+    overflow: hidden; /* Hide overflow for background animation */
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+    order: -1;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 500;
+}
+
+.header p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.game-area {
+    flex-grow: 1; /* ให้ game-area ยืดขยายเติมพื้นที่ */
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    position: relative; /* สำคัญสำหรับ z-index */
+    z-index: 5; /* อยู่ด้านบนพื้นหลัง, ด้านล่าง interaction/character */
+    /* เพิ่ม padding-bottom เพื่อให้มีพื้นที่ไม่ทับตัวละครและ interaction-area */
+    padding-bottom: 250px; /* อาจจะต้องปรับค่านี้ตามความสูงของรูปตัวละคร + choices */
+}
+
+.chat-bubble {
+    max-width: 80%;
+    padding: 12px 18px;
+    border-radius: 20px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    opacity: 0; /* For fade-in effect */
+    transform: translateY(10px); /* For slide-in effect */
+    animation: bubbleFadeIn 0.5s ease-out forwards;
+}
+
+.chat-bubble.npc {
+    background-color: var(--bubble-bg-npc);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+.chat-bubble.player {
+    background-color: var(--bubble-bg-player);
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+
+@keyframes bubbleFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.interaction-area {
+    padding: 15px 20px 20px;
+    background-color: rgba(255, 255, 255, 0.98);
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 30; 
+    position: relative;
+    order: 1;
+   
+}
+
+.choices-container {
+    padding-top: 10px; /* เพิ่มระยะห่างด้านบน */
+}
+
+.choices-container button {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.choices-container button:last-child {
+    margin-bottom: 0;
+}
+
+.choices-container button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+}
+
+.input-container input[type="text"] {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    font-size: 1em;
+    font-family: 'Mitr', sans-serif;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--text-color);
+}
+
+.input-container button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.input-container button:hover {
+    background-color: var(--button-hover);
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background-color: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: var(--heart-color);
+    border-radius: 5px;
+    transition: width 0.5s ease-out;
+}
+
+.relationship-display {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+
+.start-screen, .ending-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+    gap: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+}
+
+.start-screen h1 {
+    color: var(--primary-color);
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.start-screen p {
+    font-size: 1.1em;
+    max-width: 80%;
+}
+
+.start-screen .buttons button, .ending-screen .buttons button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.start-screen .buttons button:hover, .ending-screen .buttons button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-3px);
+}
+
+.start-screen .privacy-note {
+    font-size: 0.8em;
+    color: #777;
+    margin-top: 20px;
+}
+
+.ending-screen h2 {
+    color: var(--primary-color);
+    font-size: 2em;
+}
+
+.ending-screen pre {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 90%;
+    text-align: left;
+    font-size: 0.9em;
+    border: 1px solid #ddd;
+}
+
+.back-button {
+    background-color: #ffb7b2; /* Lighter pink */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #ff8e8e;
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        height: 95vh;
+        margin: 0;
+    }
+    .header h1 {
+        font-size: 1.5em;
+    }
+    .header p {
+        font-size: 0.8em;
+    }
+    .chat-bubble {
+        max-width: 90%;
+        padding: 10px 15px;
+    }
+    .choices-container button, .input-container input, .input-container button {
+        padding: 10px 12px;
+        font-size: 0.95em;
+    }
+    .start-screen h1 {
+        font-size: 2em;
+    }
+    .start-screen p {
+        font-size: 1em;
+    }
+    .start-screen .buttons button, .ending-screen .buttons button {
+        padding: 12px 25px;
+        font-size: 1.1em;
+    }
+}
+
+.character-display {
+    position: relative; /* เปลี่ยนจาก relative/flex เป็น absolute */
+    bottom: unset; /* จัดตำแหน่งให้อยู่เหนือ interaction-area และใต้ game-area */
+    left: unset;
+    transform: unset;
+    z-index: 20; /* ให้อยู่ด้านหน้า game-area และพื้นหลัง */
+    width: 100%; /* สามารถขยายได้ตามต้องการ */
+    max-width: 550px; /* จำกัดความกว้างไม่ให้ใหญ่เกินไป */
+    height: auto; /* ความสูงปรับตามรูปภาพ */
+    pointer-events: none; /* เพื่อให้คลิกผ่านไปยัง element ข้างล่างได้ */
+    display: flex; /* ใช้ flex เพื่อจัดกึ่งกลางรูปภาพด้านใน */
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 20px;
+    order: 2; 
+}
+
+.character-pose-image {
+    max-width: 100%; /* รูปภาพจะไม่เกินกรอบ */
+    height: auto;
+    object-fit: contain;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.character-pose-image.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* เพิ่ม CSS นี้ที่ส่วนท้ายของ style.css หรือรวมกับ start-screen/ending-screen styles */
+.name-input-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    height: 100%;
+    gap: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+}
+
+.name-input-screen h2 {
+    color: var(--primary-color);
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.name-input-screen p {
+    font-size: 1.1em;
+    max-width: 80%;
+}
+
+.name-input-screen input[type="text"] {
+    width: 80%;
+    max-width: 300px;
+    padding: 12px 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    font-size: 1em;
+    font-family: 'Mitr', sans-serif;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--text-color);
+}
+
+.name-input-screen button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.name-input-screen button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-3px);
+}
+
+#game-interface {
+    display: flex;
+    flex-direction: column; /* จัดองค์ประกอบแนวตั้ง */
+    height: 100%;
+    justify-content: flex-end; /* จัดเนื้อหาทั้งหมดไปอยู่ด้านล่าง */
+}
+/* สไตล์สำหรับภาพพื้นหลัง */
+.scene-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1; /* ให้พื้นหลังอยู่ด้านหลังสุด */
+    transition: background-image 1s ease-in-out, opacity 1s ease-in-out;
+    opacity: 0;
+}
+
+.scene-background.visible {
+    opacity: 1; /* แสดงภาพพื้นหลังเมื่อถูกตั้งค่า */
+}
+
+.game-area {
+    flex-grow: 1; /* ให้ game-area ยืดขยายเติมพื้นที่ที่เหลือทั้งหมด */
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    z-index: 5; /* Chat bubbles อยู่ด้านหน้าพื้นหลัง แต่หลังตัวละคร */
+    position: relative; /* ให้แน่ใจว่า z-index ทำงาน */
+    background-color: rgba(255, 255, 255, 0.7); /* เพิ่มพื้นหลังโปร่งแสงให้แชท เพื่อให้เห็นพื้นหลังได้แต่ยังอ่านข้อความง่าย */
+    border-radius: 15px; /* ทำให้ดูดีขึ้น */
+    padding-bottom: 20px; 
+    order: 0;
+}
+
+/* NEW: Interlude Screen Styles */
+.interlude-screen {
+    position: absolute; /* ให้ลอยอยู่เหนือหน้าจออื่น */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* พื้นหลังดำโปร่งแสง */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
+    z-index: 1000; /* ให้อยู่ด้านบนสุด */
+    opacity: 0; /* เริ่มต้นซ่อนไว้ */
+    transition: opacity 1s ease-in-out; /* เพิ่ม transition */
+}
+
+.interlude-screen.visible {
+    opacity: 1; /* แสดงผล */
+}
+
+.interlude-screen h2 {
+    font-size: 3em; /* ขนาดใหญ่สำหรับชื่อตอน */
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.interlude-screen p {
+    font-size: 1.8em; /* ขนาดกลางสำหรับข้อความ */
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+.interlude-screen button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.interlude-screen button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-3px);
+}
+/* NEW: Final Ending Screen with full image */
+.final-ending-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* ซ่อนส่วนเกินของภาพ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* อยู่ใต้ interlude แต่ทับหน้าจอเกม */
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.final-ending-screen.visible {
+    opacity: 1;
+}
+
+.final-ending-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* ครอบคลุมพื้นที่ทั้งหมด, ตัดส่วนเกินออกถ้าจำเป็น */
+    object-position: center; /* จัดกึ่งกลางภาพ */
+    filter: brightness(0.7); /* ทำให้ภาพมืดลงเล็กน้อยเพื่อให้ข้อความอ่านง่ายขึ้น */
+}
+
+.final-ending-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 30px;
+    box-sizing: border-box;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* เพิ่มเงาให้ข้อความอ่านง่าย */
+}
+
+.final-ending-overlay h2 {
+    font-size: 3.5em; /* ชื่อตอนจบที่ใหญ่และเด่น */
+    margin-bottom: 20px;
+}
+
+.final-ending-overlay p {
+    font-size: 1.8em;
+    line-height: 1.6;
+    max-width: 800px;
+    margin-bottom: 40px;
+}
+
+.final-ending-overlay .buttons button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.final-ending-overlay .buttons button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-3px);
+}
+/* NEW: Modal Styles for Memory Display */
+.modal {
+    display: flex; /* ใช้ flexbox เพื่อจัดกึ่งกลางเนื้อหา */
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1001; /* ให้อยู่บนสุดเหนือทุกองค์ประกอบ */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* เปิดใช้งานการเลื่อนหากเนื้อหาเกิน */
+    background-color: rgba(0, 0, 0, 0.6); /* พื้นหลังโปร่งแสง */
+    backdrop-filter: blur(5px); /* เพิ่มเอฟเฟกต์เบลอ */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal.visible {
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    transform: translateY(-20px);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 80vh; /* จำกัดความสูงของ modal */
+    overflow-y: auto; /* ทำให้เนื้อหาภายใน modal สามารถเลื่อนได้ */
+}
+
+.modal.visible .modal-content {
+    transform: translateY(0);
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--heart-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#memory-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.memory-block {
+    background-color: var(--bubble-bg-player); /* สีเดียวกับ player bubble */
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    font-size: 0.95em;
+    line-height: 1.6;
+    border: 1px solid var(--primary-color);
+}
+
+.memory-block.player-response {
+    background-color: var(--bubble-bg-npc); /* สีสลับกันเพื่อแยก player/npc */
+    border: 1px solid var(--secondary-color);
+}
+
+.memory-block strong {
+    color: var(--primary-color);
+}
+
+.modal-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 12px 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    align-self: center; /* จัดกึ่งกลางปุ่ม */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+/* General Mobile Adjustments */
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto; /* Allow scrolling on body if content exceeds viewport */
+        min-height: 100vh; /* Ensure body takes full height */
+        align-items: flex-start; /* Start content from top, not center */
+        padding: 10px 0; /* Add some vertical padding */
+    }
+
+    .container {
+        width: 98%; /* Slightly wider */
+        max-width: none; /* Remove max-width for smaller screens */
+        height: auto; /* Allow height to adjust dynamically */
+        min-height: 95vh; /* Ensure minimum height for container */
+        border-radius: 15px; /* Smaller border radius */
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Game Interface specific adjustments */
+    #game-interface {
+        height: 100%; /* Ensure game interface takes full height of container */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Pushes header to top, interaction to bottom */
+    }
+
+    .header {
+        padding: 10px 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .header h1 {
+        font-size: 1.4em; /* Smaller title */
+    }
+
+    .header .relationship-display {
+        font-size: 0.8em;
+    }
+
+    .back-button {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2em;
+        top: 10px;
+        left: 10px;
+    }
+
+    .scene-background {
+        /* If using full-height background, ensure it works with dynamic container height */
+        height: 100%; /* Take full height of parent (.container) */
+    }
+
+    .game-area {
+        flex-grow: 1; /* Still takes available space */
+        padding: 15px;
+        min-height: 200px; /* Ensure a minimum height for chat area */
+        /* Remove fixed padding-bottom here if character-display is absolute */
+        padding-bottom: 15px; /* Adjust as needed, less than before */
+        background-color: rgba(255, 255, 255, 0.85); /* Make chat area slightly more opaque */
+    }
+
+    .chat-bubble {
+        max-width: 95%; /* Wider bubbles on small screens */
+        padding: 10px 15px;
+        font-size: 0.9em;
+    }
+
+    .interaction-area {
+        padding: 10px 15px;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .choices-container button {
+        padding: 10px 12px;
+        font-size: 0.9em;
+        margin-bottom: 6px;
+        border-radius: 8px;
+    }
+
+    .input-container input[type="text"] {
+        padding: 10px 12px;
+        font-size: 0.9em;
+        border-radius: 8px;
+    }
+
+    .input-container button {
+        padding: 10px 15px;
+        font-size: 0.9em;
+        border-radius: 8px;
+    }
+
+    /* Character Display - IMPORTANT for mobile */
+    .character-display {
+        position: absolute; /* Change to absolute positioning */
+        bottom: 80px; /* Adjust this value to place it above interaction-area */
+        left: 50%;
+        transform: translateX(-50%); /* Center horizontally */
+        width: 100%; /* Take full width for centering, but image itself should be max-width */
+        max-width: 400px; /* Limit overall character display width */
+        height: auto;
+        pointer-events: none; /* Crucial: allows clicking through to choices/input */
+        z-index: 20; /* Ensure it's above game-area */
+        padding-bottom: 0; /* No need for padding-bottom here if bottom is set */
+        display: flex; /* Keep flex for centering the image */
+        justify-content: center;
+        align-items: flex-end;
+    }
+
+    .character-pose-image {
+        max-width: 80%; /* Limit image width to prevent it from being too big */
+        max-height: 200px; /* Set a max height for character image on mobile */
+        object-fit: contain;
+    }
+
+    /* Start/Ending/Name Input Screens */
+    .start-screen, .ending-screen, .name-input-screen {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .start-screen h1, .name-input-screen h2 {
+        font-size: 1.8em;
+    }
+
+    .start-screen p, .name-input-screen p {
+        font-size: 0.9em;
+    }
+
+    .start-screen .buttons button, .ending-screen .buttons button, .name-input-screen button {
+        padding: 10px 20px;
+        font-size: 1em;
+        margin: 8px;
+        border-radius: 10px;
+    }
+
+    .start-screen .privacy-note {
+        font-size: 0.75em;
+    }
+
+    /* Interlude Screen */
+    .interlude-screen {
+        padding: 20px;
+    }
+    .interlude-screen h2 {
+        font-size: 2em;
+    }
+    .interlude-screen p {
+        font-size: 1.2em;
+    }
+    .interlude-screen button {
+        padding: 12px 25px;
+        font-size: 1.1em;
+    }
+
+    /* Final Ending Screen */
+    .final-ending-overlay h2 {
+        font-size: 2.5em;
+    }
+    .final-ending-overlay p {
+        font-size: 1.3em;
+    }
+    .final-ending-overlay .buttons button {
+        padding: 12px 25px;
+        font-size: 1.1em;
+    }
+
+    /* Memory Modal */
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+        border-radius: 15px;
+        gap: 15px;
+        max-height: 90vh; /* Allow more height for modal content */
+    }
+    .modal-content h2 {
+        font-size: 1.5em;
+    }
+    .memory-block {
+        padding: 12px;
+        font-size: 0.85em;
+        border-radius: 10px;
+    }
+    .modal-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+}
