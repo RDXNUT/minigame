@@ -80,7 +80,6 @@ const gameScenes = {
             {
                 "id": "s7",
                 "text": "บันนี่มีคำถามน่ะ ถ้าเธอกลายเป็นสัตว์ได้หนึ่งวัน... อยากเป็นสัตว์อะไร?",
-                "character_pose": "curious",
                 "interaction": {
                     "type": "choices", 
                     "choices": [
@@ -93,7 +92,6 @@ const gameScenes = {
             {
                 "id": "s8",
                 "text": "แล้วเวลาว่างของเธอ... ชอบทำอะไรเป็นพิเศษหรอ?",
-                "character_pose": "curious",
                 "interaction": {
                     "type": "open_text",
                     "save_as": "free_time",
@@ -103,7 +101,6 @@ const gameScenes = {
             {
                 "id": "s9",
                 "text": "อ๋าาา เยี่ยมเลยยย แต่ตอนนี้บันนี่ว่าเราพักกันก่อนดีกว่า",
-                "character_pose": "walk",
                 "interaction": {
                     "type": "choices",
                     "choices": [
@@ -534,6 +531,9 @@ async function renderCurrentScene() {
          // <--- แสดงท่าทางตัวละครสำหรับ step ปัจจุบัน
             if (currentStep.character_pose) {
                 await showCharacterPose(currentStep.character_pose);
+            }
+            else {
+                hideCharacterPose(); // ถ้าไม่มี character_pose ให้ซ่อนตัวละคร
             }
 
         renderInteraction(currentStep.interaction);
