@@ -59,7 +59,6 @@ const gameScenes = {
             {
                 "id": "s5",
                 "text": "มีทางอยู่สองทาง ทางหิ่งห้อย หรือ ทางลำธาร — เธอจะเลือกไปทางไหน?",
-                "character_pose": "curious",
                 "interaction": {
                     "type": "choices",
                     "choices": [
@@ -82,6 +81,7 @@ const gameScenes = {
             {
                 "id": "s7",
                 "text": "บันนี่มีคำถามน่ะ ถ้าเธอกลายเป็นสัตว์ได้หนึ่งวัน... อยากเป็นสัตว์อะไร?",
+                "character_pose": "curious",
                 "interaction": {
                     "type": "choices", 
                     "choices": [
