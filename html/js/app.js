@@ -59,7 +59,7 @@ const gameScenes = {
             {
                 "id": "s5",
                 "text": "มีทางอยู่สองทาง ทางหิ่งห้อย หรือ ทางลำธาร — เธอจะเลือกไปทางไหน?",
-                "character_pose": "path1",
+                "character_pose": "curious",
                 "interaction": {
                     "type": "choices",
                     "choices": [
