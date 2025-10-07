@@ -170,7 +170,6 @@ const gameScenes = {
             {
                 "id": "s5",
                 "text": "หวังว่าบันนี่จะเป็นคนโชคดีคนนั้น (~ ¯▽¯) ~",
-                "character_pose": "happy",
                 "interaction": {
                     "type": "choices",
                     "choices": [
