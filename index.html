@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Gift for Jelly ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- พลุฉลอง -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- ระบบ Login -->
+    <div id="auth-section">
+        <button id="login-btn" onclick="login()">🔑 เข้าสู่ระบบด้วย Google</button>
+        <div id="user-info" class="hidden">
+            <img id="user-pic" src="" alt="Profile">
+            <span id="user-name"></span>
+            <button onclick="logout()" class="logout-btn">ออกจากระบบ</button>
+        </div>
+    </div>
+
+    <!-- ปุ่มเปิด-ปิดหิมะ -->
+    <button id="snow-toggle" onclick="toggleSnow()">❄️ On</button>
+    <div id="snow-container"></div>
+
+    <div class="container">
+        
+        <!-- Step 1: ซองจดหมาย -->
+        <div id="step1" class="scene">
+            <h1 class="festive-title">Happy New Year! 🎄</h1>
+            <div class="envelope-container" onclick="nextStep(2)">
+                <img src="images/letter1.png" alt="Envelope" id="envelope-img">
+                <p class="instruction-text">กดเพื่อไปต่อ 🎁</p>
+            </div>
+        </div>
+
+        <!-- Step 2: การ์ดพลิกได้ -->
+        <div id="step2" class="scene hidden">
+            <div class="card-container" onclick="flipCard()">
+                <div class="card-inner" id="card-inner">
+                    <div class="card-front">
+                        <img src="images/card_front.png" alt="Card Front">
+                        <div class="overlay-text">แตะเพื่อดูด้านใน</div>
+                    </div>
+                    <div class="card-back">
+                        <div class="card-text">
+                            <h2>Happy New Year!</h2>
+                            <p>ขอให้เป็นปีที่ใจดีกับเจลมากๆ </p>
+                            <p>ได้เก่งขึ้นกว่าเดิม เสียใจน้อยลงพบเจอแต่คนดีๆ 
+                              ดูแลสุขภาพตัวเองดีๆ พักผ่อนเยอะขึ้น รักตัวเองมากๆ
+                              ไม่ว่าจะไปไหนก็ขอให้ปลอดภัย มีเรื่องให้ยิ้มได้ในทุกๆ วัน
+                            </p>
+                            <p> - - - - </p>
+                            <p> เลิ้บบบ </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="next-btn hidden" id="card-next-btn" onclick="nextStep(3)">รับของขวัญ 🎁</button>
+        </div>
+
+        <!-- Step 3: แมวกินคุกกี้ -->
+        <div id="step3" class="scene hidden">
+            <h2 class="celebrate-text">ยินดีด้วย<br>คุณได้รับของขวัญ! 🎉</h2>
+            <img src="images/cat_cookie.png" alt="Cat Eating Cookie" class="sticker-img">
+            <button class="next-btn" onclick="nextStep(4)">กดเพื่อจัดส่ง 🛵</button>
+        </div>
+
+        <!-- Step 4: แมวแว้น -->
+        <div id="step4" class="scene hidden">
+    <div class="delivery-area">
+        <!-- คลาส sticker-img-move จะถูกรันแอนิเมชั่นทันทีที่หน้านี้ปรากฏ (hidden หายไป) -->
+        <img src="images/cat_motorcycle.png" alt="Cat Delivery" class="sticker-img-move">
+    </div>
+    <p class="shipping-text">
+        สินค้ากำลังจัดส่ง<span class="dot-1">.</span><span class="dot-2">.</span><span class="dot-3">.</span>
+        <br>
+        <span class="sub-text">รอรับของอร่อยในวันที่เจอกันนะ 🍪</span>
+    </p>
+    <button class="next-btn" onclick="nextStep(5)">ไปต่อ ✨</button>
+</div>
+
+        <!-- Step 5-6: แมวคิด/นึกออก -->
+        <div id="step5" class="scene hidden">
+            <div class="content-wrapper">
+                <img src="images/cat_thinking.png" class="sticker-img sticker-bounce">
+                <h2 class="festive-subtitle">ยังขาดอะไรอีกน้าาา...</h2>
+                <button class="next-btn btn-pop" onclick="nextStep(6)">???</button>
+            </div>
+        </div>
+        <div id="step6" class="scene hidden">
+            <div class="content-wrapper">
+                <img src="images/cat_eureka.png" class="sticker-img sticker-bounce">
+                <h2 class="festive-subtitle">อ๋อออออ นึกออกแล้ว!</h2>
+                <button class="next-btn btn-pop" onclick="nextStep(7)">ไปดูเลย!</button>
+            </div>
+        </div>
+
+        <!-- Step 7: Anniversary -->
+        <div id="step7" class="scene hidden">
+            <div class="content-wrapper">
+                <h1 class="anniversary-title blink-text">Happy 1st Month<br>Anniversary! ❄️</h1>
+                <img src="images/success.png" class="sticker-img sticker-float">
+                <div class="btn-center">
+                    <button class="next-btn btn-faint" onclick="nextStep(8)">กดเพื่อไปต่อ ✨</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 8: ฉากพักใจ (Emotional Transition) - แทรกใหม่ -->
+        <div id="step8" class="scene emotional-scene hidden">
+            <div class="emotional-content">
+                <!-- สติกเกอร์แมวตรงกลาง -->
+                <img src="images/hug.png" alt="Bonnie" class="sticker-img sticker-bounce">
+                
+                <!-- ข้อความขึ้นทีละบรรทัด -->
+                <div class="typing-wrapper">
+                    <p id="type-1" class="typewriter-text"></p>
+                    <p id="type-2" class="typewriter-text"></p>
+                    <p id="type-3" class="typewriter-text"></p>
+                </div>
+
+                <button class="next-btn btn-pop hidden" id="go-together-btn" onclick="nextStep(9)">👉 ไปด้วยกัน</button>
+            </div>
+        </div>
+
+        <!-- Step 9: หน้าเขียน Checklist (ขยับจาก 8 มาเป็น 9) -->
+        <div id="step9" class="scene hidden">
+            <!-- โครงสร้างเดิมของหน้า Checklist -->
+            <div class="chat-bubble animate-pop">มาเขียน Checklist ปี 2026 กัน!</div>
+            <div class="checklist-img-container">
+                <img src="images/checklist.png" alt="Checklist Icon" class="checklist-main-img">
+            </div>
+            <div class="input-container">
+                <input type="text" id="item-input" placeholder="พิมพ์สิ่งที่อยากทำในปี 2026...">
+                <button onclick="addItem()" class="add-btn">+</button>
+            </div>
+            <div id="live-list-container" class="live-list"></div>
+            <button class="next-btn finish-btn" onclick="showSummary()">เขียนเสร็จแล้ว ✨</button>
+        </div>
+
+        <!-- Step 10: หน้าสรุปสุดท้าย (ขยับจาก 9 มาเป็น 10) -->
+        <div id="step10" class="scene hidden">
+            <div class="summary-card animate-pop">
+                <h1 class="blink-text">Your 2026 Goals 🌟</h1>
+                <div id="final-summary-list" class="summary-list"></div>
+                <p id="save-status"></p>
+            </div>
+
+            <!-- ปรับเหลือแค่ปุ่มบันทึกและปุ่มไปต่อ ตามคำขอ -->
+            <div class="final-buttons-container">
+                <button id="save-btn" class="restart-btn-outer" onclick="saveToFirebase()">💾 บันทึกเป้าหมาย</button>
+                <button class="restart-btn-outer" onclick="nextStep(11)">ไปต่อ ✨</button>
+            </div>
+        </div>
+
+        <!-- Step 11: กรอกชื่อ -->
+        <div id="step11" class="scene hidden">
+            <div class="content-wrapper">
+                <div class="input-container">
+                    <input type="text" id="user-name-input" placeholder="พิมพ์ชื่อของเธอตรงนี้...">
+                </div>
+                <button class="next-btn btn-pop" onclick="submitName()">ตกลง ✨</button>
+            </div>
+        </div>
+
+        <!-- Step 11-Intro: แนะนำตัวบอนนี่ -->
+        <div id="step11-intro" class="scene hidden">
+            <div class="content-wrapper">
+                <img src="images/success.png" alt="Success" class="sticker-img sticker-bounce">
+                <div class="chat-bubble animate-pop" id="bonnie-intro-text">
+                    <!-- ข้อความจะถูกใส่ผ่าน JS -->
+                </div>
+                <button class="next-btn btn-pop" onclick="nextStep(12)">ยินดีที่ได้รู้จักนะ</button>
+            </div>
+        </div>
+
+        <!-- Step 12: เริ่มเรื่องราว (Fantasy1) -->
+        <div id="step12" class="scene fantasy-scene hidden" style="background-image: url('images/bg1.png');">
+            <div class="narrative-container">
+                <div id="narrative-text" class="typewriter-text"></div>
+                <button id="narrative-next-btn" class="next-btn btn-faint hidden" onclick="nextStep('F1')">เดินทางต่อ ✨</button>
+            </div>
+        </div>
+
+        <!-- Step F1: ประตูเวทมนตร์ (Fantasy2) -->
+        <div id="stepF1" class="scene fantasy-scene hidden" style="background-image: url('images/bg2.png');">
+            <!-- เอฟเฟกต์ดาวลอย -->
+            <div id="star-container"></div>
+            
+            <div class="fantasy-content">
+                <img src="images/fantacy_cat.png" alt="Fantasy Bonnie" class="character-img sticker-float">
+                
+                <!-- กล่องข้อความบอนนี่ -->
+                <div class="chat-bubble dialogue-box animate-pop" id="bonnie-dialogue">
+                    ที่นี่คืออาณาจักรบอนนี่เอง
+                </div>
+
+                <!-- ตัวเลือกคำตอบ -->
+                <div id="choice-container" class="choice-wrapper hidden">
+                    <button class="choice-btn" onclick="handleChoice('slow')">งั้นค่อย ๆ ไปก็ได้</button>
+                </div>
+            </div>
+        </div>
+        <!-- Step F2: Go Go! -->
+<div id="stepF2" class="scene fantasy-scene hidden" style="background-image: url('images/bg3.png');">
+    <div class="fantasy-content">
+        <img src="images/fantacy_cat2.png" id="cat-f2" class="character-img slide-up-cat">
+        <h1 class="go-text animate-pop">Go! Go!</h1>
+        <button class="next-btn btn-faint" onclick="nextStep('F3')" style="margin-top: 20px;">เดินทางต่อ ✨</button>
+    </div>
+</div>
+
+<!-- Step F3: ของวิเศษ -->
+<div id="stepF3" class="scene fantasy-scene hidden" style="background-image: url('images/bg4.png');">
+    <div class="fantasy-content">
+        <div class="chat-bubble dialogue-box" id="f3-dialogue">เรามีของวิเศษให้เลือกติดตัวไปตลอดทาง</div>
+        <div class="items-container">
+            <!-- ชิ้นที่ 1 -->
+            <div class="magic-item" onclick="chooseItem('cloak')">
+                <img src="images/magic1.png" class="magic-icon-img" style="width: 60px; height: 60px; object-fit: contain;">
+                <p>ผ้าคลุมคืนดาว</p>
+            </div>
+            <!-- ชิ้นที่ 2 -->
+            <div class="magic-item" onclick="chooseItem('light')">
+                <img src="images/magic2.png" class="magic-icon-img" style="width: 60px; height: 60px; object-fit: contain;">
+                <p>ขวดแสงร่วมทาง</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Step F4: Deep Talk with Bonnie -->
+<div id="stepF4" class="scene fantasy-scene hidden" style="background-image: url('images/bg4.png');">
+    <div class="fantasy-content">
+        <img src="images/fantacy_cat.png" id="f4-cat" class="character-img sticker-bounce">
+        
+        <!-- กล่องข้อความหลัก -->
+        <div class="chat-bubble dialogue-box" id="f4-dialogue">
+            ช่วงนี้เป็นยังไงบ้าง?
+        </div>
+
+        <!-- โซนตัวเลือกตอบ -->
+        <div id="f4-choice-area" class="choice-wrapper">
+            <!-- ปุ่มจะถูกสร้างจาก JS -->
+        </div>
+
+        <!-- โซนกรอกข้อความ (สำหรับเรื่องที่ภูมิใจ) -->
+        <!-- ค้นหาส่วน id="f4-input-area" ใน HTML ของคุณแล้วแทนที่ด้วยตัวนี้ -->
+        <div id="f4-input-area" class="hidden">
+            <!-- ส่วนพิมพ์ -->
+            <div class="input-container">
+                <input type="text" id="pride-input" placeholder="พิมพ์สิ่งที่ภูมิใจในพื้นที...">
+                <button onclick="submitPride()" class="add-btn" style="background: #f1c40f;">✔️</button>
+            </div>
+
+            <!-- ส่วนแสดงรายการที่พิมพ์แล้ว -->
+            <div id="pride-list-display" class="live-list" style="margin-top: 15px; max-height: 180px;"></div>
+
+            <!-- ปุ่มไปต่อ (จะโชว์เมื่อพิมพ์อย่างน้อย 1 อย่าง) -->
+            <button id="pride-next-btn" class="next-btn btn-pop hidden" onclick="finishPrideSection()" style="margin-top: 15px; width: 80%;">
+                ไปต่อ ✨
+            </button>
+        </div>
+    </div>
+</div>
+<!-- Step F4-Storm: ฉากพายุเริ่มมา -->
+<div id="stepF4-storm" class="scene fantasy-scene hidden" style="background-image: url('images/bg5.png');">
+    <div class="narrative-container" id="storm-narrative">
+        <!-- ข้อความจะขึ้นทีละบรรทัดจาก JS -->
+    </div>
+</div>
+
+<!-- Step F4-Action: บอนนี่ตกใจและให้เลือกตอบ -->
+<div id="stepF4-action" class="scene fantasy-scene hidden" style="background-image: url('images/bg5.png');">
+    <div class="fantasy-content">
+        <img src="images/sad_cat.png" class="character-img sticker-bounce">
+        <div class="chat-bubble dialogue-box" id="storm-dialogue">
+            เดี๋ยวนะ… ปกติทุ่งดาวไม่ควรจะเสียงดังขนาดนี้
+        </div>
+        <div id="storm-choice-area" class="choice-wrapper">
+            <!-- ปุ่มจะขึ้นหลังบอนนี่พูดจบ -->
+        </div>
+    </div>
+</div>
+
+<!-- Step Magic Pop-up: หน้าโชว์ของวิเศษที่เลือกมา -->
+<!-- Step Magic Pop-up: หน้ารูปไอเทมเด้งขึ้นมา -->
+<div id="stepMagic-use" class="scene fantasy-scene hidden" style="background-image: url('images/bg5.png');">
+    <div class="summary-card animate-pop" style="background: rgba(255,255,255,0.9); padding: 30px; border-radius: 30px;">
+        <!-- ตรงนี้คือจุดโชว์รูปไอเทม -->
+        <div id="magic-item-container" style="margin-bottom: 20px;">
+            <img id="magic-item-img" src="" style="width: 150px; height: auto;">
+        </div>
+        <h2 id="magic-item-name" style="color: #333; margin-bottom: 20px; font-family: 'Mali';"></h2>
+        <button class="next-btn" id="use-item-btn" style="width: 100%;">กดเพื่อใช้ไอเทม ✨</button>
+    </div>
+</div>
+
+<!-- Step Magic Result: ผลลัพธ์หลังใช้ไอเทม -->
+<div id="stepMagic-result" class="scene fantasy-scene hidden">
+    <div class="narrative-container" id="magic-result-text">
+        <!-- ข้อความบรรยายผลลัพธ์ -->
+    </div>
+</div>
+
+<!-- Step F5: บทสรุปความรู้สึก -->
+<div id="stepF5" class="scene fantasy-scene hidden" style="background-image: url('images/bg6.png');">
+    <div class="fantasy-content">
+        <img id="f5-cat" src="images/final_cat.png" class="character-img sticker-float">
+        <div class="chat-bubble dialogue-box" id="f5-dialogue">
+            ยอมรับเลยนะ ตอนแรกบอนนี่ก็กลัวเหมือนกัน
+        </div>
+        <div id="f5-choice-area" class="choice-wrapper"></div>
+    </div>
+</div>
+
+<!-- Step F6: Happy Ending & Final Card -->
+<div id="stepF6" class="scene hidden">
+    <!-- หัวข้อพร้อมหัวใจ -->
+    <h1 class="festive-title blink-text">Happy Ending ❤️</h1>
+    
+    <!-- การ์ดจดหมายสุดท้าย -->
+    <div class="card-container" onclick="flipFinalCard()">
+        <div class="card-inner" id="final-card-inner">
+            <!-- ด้านหน้าการ์ด (รูปซองจดหมายหรือรูปสวยๆ) -->
+            <div class="card-front">
+                <img src="images/card_front.png" alt="Final Card Front">
+                <div class="overlay-text">แตะเพื่อเปิดอ่านข้อความพิเศษ 💌</div>
+            </div>
+            
+            <!-- ด้านหลังการ์ด (ข้อความถึง Jelly) -->
+            <div class="card-back">
+                <div class="card-text">
+                    <h2>🐱</h2>
+                    <p>ขอบคุณที่ร่วมเดินทางมาด้วยกันจนจบนะ</p>
+                    <p>บอนนี่และคนทางนี้จะคอยเป็นกำลังใจให้เสมอ</p>
+                    <p>ฉลองปีใหม่ให้สนุกน้าาา</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ปุ่มเริ่มใหม่แบบพรีเมียม -->
+    <button class="restart-btn-outer" onclick="location.reload()">
+        🔄 เล่นใหม่อีกครั้ง
+    </button>
+</div>
+
+    </div>
+    <!-- Custom Pop-up Modal -->
+<div id="custom-modal" class="modal-overlay hidden">
+    <div class="modal-box animate-pop">
+        <div class="modal-icon">⚠️</div>
+        <p id="modal-text">ข้อความแจ้งเตือน</p>
+        <button class="modal-close-btn" onclick="closeModal()">ตกลง</button>
+    </div>
+</div>
+
+    <!-- เชื่อมต่อ Firebase และ Script หลัก -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>

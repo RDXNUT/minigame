@@ -1,894 +1,1287 @@
-:root {
-    --primary-color: #A7CEDC; /* Sky blue */
-    --secondary-color: #F8D8DA; /* Light pink */
-    --accent-color: #B5EAD7; /* Mint green */
-    --text-color: #4A4A4A;
-    --bubble-bg-player: #E0F7FA; /* Light cyan */
-    --bubble-bg-npc: #FFF9C4; /* Light yellow */
-    --button-hover: #98D8E8;
-    --heart-color: #FF6B6B; /* Red for relationship */
+/* --- ส่วนที่ 1: ตั้งค่าพื้นฐานและพื้นหลัง --- */
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Mali', cursive;
 }
 
 body {
-    font-family: 'Mitr', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(to bottom right, var(--primary-color), var(--accent-color));
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: linear-gradient(180deg, #c0392b 0%, #7a0f11 100%);
     min-height: 100vh;
-    color: var(--text-color);
-    overflow: hidden; /* Hide overflow for background animation */
+    display: flex; justify-content: center; align-items: center;
+    overflow-x: hidden; color: #fff;
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 600px;
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    width: 100%; max-width: 400px; padding: 20px;
+    text-align: center; z-index: 10;
+}
+
+.hidden { display: none !important; }
+
+/* --- ส่วนที่ 2: หน้าแรก ซองจดหมาย --- */
+.festive-title { font-size: 1.8rem; margin-bottom: 20px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+#envelope-img { width: 70%; animation: float 3s infinite ease-in-out; cursor: pointer; filter: drop-shadow(0 0 10px gold); }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+/* --- ส่วนที่ 3: การ์ดพลิก (Flip Card) --- */
+.card-container { width: 280px; height: 380px; perspective: 1000px; margin: 0 auto 20px; cursor: pointer; }
+.card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.8s; transform-style: preserve-3d; }
+.card-inner.flipped { transform: rotateY(180deg); }
+.card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; border: 4px solid white; overflow: hidden; }
+.card-front img { width: 100%; height: 100%; object-fit: cover; }
+.card-back { background: #fffbf0; color: #333; transform: rotateY(180deg); padding: 25px; display: flex; align-items: center; justify-content: center; text-align: left; }
+.card-text h2 { color: #c0392b; margin-bottom: 10px; }
+.tap-hint { position: absolute; bottom: 10px; width: 100%; color: white; background: rgba(0,0,0,0.5); font-size: 0.8rem; }
+
+/* --- ส่วนที่ 4: สติกเกอร์แมวและแอนิเมชั่น --- */
+.sticker-img { width: 200px; height: auto; margin-bottom: 20px; border-radius: 10px; }
+.cat-drive { width: 140px; animation: drive 4s infinite linear; }
+@keyframes drive { 
+    0% { transform: translateX(-150px); } 
+    100% { transform: translateX(150px); } 
+}
+
+
+.chat-bubble { background: white; color: #333; padding: 15px; border-radius: 15px 15px 15px 0; margin-bottom: 20px; width: 90%; font-size: 0.9rem; }
+/* --- Step 8: กระดาษโน้ต --- */
+.paper-container {
+    perspective: 1000px;
+    margin: 20px 0;
+}
+
+.notebook-paper {
+    background: #fff;
+    background-image: 
+        linear-gradient(#91c1cc .1em, transparent .1em); /* เส้นบรรทัด */
+    background-size: 100% 2.5rem;
+    width: 320px;
+    min-height: 350px;
+    padding: 30px 20px 20px 50px; /* เว้นที่ว่างด้านซ้ายเหมือนสมุด */
     position: relative;
-    animation: fadeIn 0.8s ease-out;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    transform: rotate(-2deg); /* ทำให้ดูเหมือนวางกระดาษเบี้ยวๆ น่ารัก */
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* เส้นสีแดงข้างกระดาษ */
+.notebook-paper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 40px;
+    width: 2px; height: 100%;
+    background: #ffadad;
 }
 
-.header {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 15px 25px;
+.paper-title {
+    color: #c0392b;
+    margin-bottom: 25px;
+    font-size: 1.3rem;
     text-align: center;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 10;
-    order: -1;
 }
 
-.header h1 {
-    margin: 0;
-    font-size: 1.8em;
-    font-weight: 500;
+#checklist-items {
+    list-style: none;
+    text-align: left;
 }
 
-.header p {
-    margin: 5px 0 0;
-    font-size: 0.9em;
+#checklist-items li {
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 2.5rem; /* ให้ตรงกับเส้นบรรทัด */
+    border-bottom: 1px solid transparent;
+}
+
+#checklist-items li::before {
+    content: '⭐';
+    margin-right: 10px;
+}
+
+/* ช่องเพิ่มรายการ */
+.add-item-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+#item-input {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 2px solid #fff;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    outline: none;
+}
+
+#item-input::placeholder { color: #eee; }
+
+.add-btn {
+    background: #f1c40f;
+    border: none;
+    width: 45px; height: 45px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* --- Step 9: หน้าสรุป --- */
+.summary-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 20px;
+    color: #333;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.summary-list {
+    text-align: left;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.summary-item {
+    padding: 8px 0;
+    border-bottom: 1px dashed #ccc;
+    color: #c0392b;
+    font-weight: bold;
+}
+
+.footer-msg {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 15px;
+}
+
+.animate-pop { animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* --- ส่วนที่ 6: ปุ่มต่างๆ --- */
+.next-btn { background: #27ae60; color: white; border: none; padding: 12px 30px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.close-btn { margin-top: auto; background: #c0392b; color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; }
+
+/* --- ส่วนที่ 7: หิมะ --- */
+.snowflake { position: fixed; top: -10px; color: white; pointer-events: none; z-index: 999; animation: fall linear infinite; }
+@keyframes fall { to { transform: translateY(110vh); } }
+.blink-text { animation: blink 1.5s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+/* --- แอนิเมชั่นข้อความกำลังจัดส่ง --- */
+.shipping-text {
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    /* ทำให้ข้อความทั้งก้อนลอยขึ้นลงเบาๆ */
+    animation: floatingText 2s infinite ease-in-out;
+}
+
+.sub-text {
+    font-size: 1rem;
+    font-weight: normal;
+    display: block;
+    margin-top: 10px;
     opacity: 0.9;
 }
 
-.game-area {
-    flex-grow: 1; /* ให้ game-area ยืดขยายเติมพื้นที่ */
-    overflow-y: auto;
-    padding: 20px;
+/* ทำให้จุดทีละจุดขยับดึ๋งๆ */
+.dot-1, .dot-2, .dot-3 {
+    display: inline-block;
+    animation: dotJump 1.4s infinite;
+}
+
+.dot-2 { animation-delay: 0.2s; }
+.dot-3 { animation-delay: 0.4s; }
+
+/* แอนิเมชั่นตัวอักษรลอย */
+@keyframes floatingText {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* แอนิเมชั่นจุดกระโดด */
+@keyframes dotJump {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+    40% { transform: translateY(-10px); opacity: 1; color: #f1c40f; }
+}
+/* --- แอนิเมชั่นตอนเข้าหน้าการ์ด (Step 2) --- */
+
+/* ตั้งค่าเริ่มต้นให้ Step 2 มีความนุ่มนวล */
+#step2.scene:not(.hidden) .card-container {
+    animation: cardEntrance 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* เอฟเฟกต์แสงฟุ้งรอบการ์ด */
+.card-container::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%; height: 120%;
+    background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(255,255,255,0) 70%);
+    z-index: -1;
+    animation: glowPulse 2s infinite ease-in-out;
+}
+
+/* แอนิเมชั่นการ์ดพุ่งออกมาและหมุนเล็กน้อย */
+@keyframes cardEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-10deg);
+        filter: blur(10px);
+    }
+    70% {
+        transform: scale(1.1) rotate(2deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        filter: blur(0);
+    }
+}
+
+/* แอนิเมชั่นแสงวูบวาบ */
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* เพิ่มความสั่นเบาๆ ให้ข้อความ "แตะเพื่อดูด้านใน" */
+.tap-hint {
+    animation: hintBounce 1s infinite alternate;
+}
+
+@keyframes hintBounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-5px); }
+}
+/* --- Step 8: Checklist ด้วยรูปภาพคัสตอม --- */
+
+.checklist-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    margin: 15px auto;
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    position: relative; /* สำคัญสำหรับ z-index */
-    z-index: 5; /* อยู่ด้านบนพื้นหลัง, ด้านล่าง interaction/character */
-    /* เพิ่ม padding-bottom เพื่อให้มีพื้นที่ไม่ทับตัวละครและ interaction-area */
-    padding-bottom: 250px; /* อาจจะต้องปรับค่านี้ตามความสูงของรูปตัวละคร + choices */
+    justify-content: center;
 }
 
-.chat-bubble {
-    max-width: 80%;
-    padding: 12px 18px;
-    border-radius: 20px;
-    line-height: 1.5;
-    word-wrap: break-word;
-    opacity: 0; /* For fade-in effect */
-    transform: translateY(10px); /* For slide-in effect */
-    animation: bubbleFadeIn 0.5s ease-out forwards;
+.checklist-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    border-radius: 15px; /* ถ้าอยากให้รูปมน */
 }
 
-.chat-bubble.npc {
-    background-color: var(--bubble-bg-npc);
-    align-self: flex-start;
-    border-bottom-left-radius: 5px;
+/* เลเยอร์ข้อความที่ทับบนรูป */
+.checklist-overlay {
+    position: absolute;
+    top: 20%;      /* ปรับค่า % ตรงนี้เพื่อให้ข้อความเลื่อนขึ้น/ลงให้ตรงกับพื้นที่ว่างในรูป */
+    left: 15%;     /* ปรับค่า % ตรงนี้เพื่อให้ข้อความเลื่อนซ้าย/ขวา */
+    right: 10%;
+    bottom: 10%;
+    overflow-y: auto; /* ถ้าข้อความยาวเกินรูปจะเลื่อนดูได้ */
+    text-align: left;
 }
 
-.chat-bubble.player {
-    background-color: var(--bubble-bg-player);
-    align-self: flex-end;
-    border-bottom-right-radius: 5px;
+#checklist-items {
+    list-style: none;
+    padding: 0;
 }
 
-@keyframes bubbleFadeIn {
+#checklist-items li {
+    font-size: 1rem;
+    color: #333;   /* เปลี่ยนสีตัวหนังสือตามสีรูปของคุณ (เช่น ถ้ารูปสีเข้มให้ใช้สีขาว) */
+    margin-bottom: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    animation: pop 0.3s ease-out;
+}
+
+/* ส่วนกล่องพิมพ์ด้านล่างรูป */
+.input-container {
+    background: rgba(255, 255, 255, 0.15) !important; /* พื้นหลังจางๆ */
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50px; /* ทำให้มนเหมือนในรูป */
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 350px;
+    margin: 20px auto;
+}
+#user-name-input {
+    background: transparent !important; /* บังคับโปร่งใส */
+    background-color: transparent !important; /* กันเหนียว */
+    border: none !important;
+    outline: none !important;
+    color: white !important; /* สีตัวอักษรตอนพิมพ์ */
+    font-family: 'Mali', cursive;
+    font-size: 1.1rem;
+    width: 100%;
+    padding: 10px 0;
+}
+#user-name-input::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+/* แก้ไขปัญหาสีขาวค้างตอน Browser จำค่า (Autofill) */
+#user-name-input:-webkit-autofill,
+#user-name-input:-webkit-autofill:hover, 
+#user-name-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+.input-container:focus-within {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+/* ลบพื้นหลังทึบขาวออกจากตัว Input ทุกตัว */
+.input-container input {
+    background: transparent !important; /* บังคับให้พื้นหลังโปร่งใส */
+    border: none !important;            /* เอาเส้นขอบเดิมออก */
+    outline: none !important;           /* เอาเส้นเน้นเวลาคลิกออก */
+    color: white;                       /* สีตัวอักษรที่พิมพ์ */
+    font-family: 'Mali', cursive;
+    font-size: 1rem;
+    flex: 1;
+    padding: 10px 5px;
+}
+
+/* สีของตัวหนังสือตัวอย่าง (Placeholder) */
+.input-container input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+#item-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 5px 15px;
+    font-size: 0.9rem;
+}
+
+#item-input::placeholder { color: rgba(255, 255, 255, 0.7); }
+
+.add-btn {
+    background: #f1c40f;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+
+/* --- Step 8: ปรับปรุงการแสดงผลรายการด้านล่าง --- */
+.checklist-img-small {
+    width: 180px; /* ปรับขนาดรูปให้เล็กลงหน่อยเพื่อประหยัดพื้นที่ */
+    height: auto;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+}
+
+/* กล่องรวมรายการที่พิมพ์แล้ว */
+.live-list {
+    width: 100%;
+    max-width: 350px;
+    margin: 10px auto 20px auto;
+    max-height: 200px; /* กำหนดความสูงสูงสุด */
+    overflow-y: auto;  /* ถ้าเยอะเกินให้เลื่อนขึ้นลงได้ */
+    padding: 0 10px;
+}
+
+/* สไตล์ของแต่ละข้อความที่เพิ่มเข้ามา */
+.live-item {
+    background: rgba(255, 255, 255, 0.9);
+    color: #c0392b;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    align-items: center;
+}
+
+.live-item::before {
+    content: '📌';
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.interaction-area {
-    padding: 15px 20px 20px;
-    background-color: rgba(255, 255, 255, 0.98);
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+
+/* ปรับแต่งปุ่มเสร็จสิ้น */
+.finish-btn {
+    background: #27ae60;
+    font-weight: bold;
+    width: 100%;
+    max-width: 350px;
+}
+/* --- การจัดหน้าใหม่ให้สวยงาม --- */
+.content-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    z-index: 30; 
-    position: relative;
-    order: 1;
-   
-}
-
-.choices-container {
-    padding-top: 10px; /* เพิ่มระยะห่างด้านบน */
-}
-
-.choices-container button {
-    display: block;
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 8px;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    border: none;
-    border-radius: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.choices-container button:last-child {
-    margin-bottom: 0;
-}
-
-.choices-container button:hover {
-    background-color: var(--button-hover);
-    transform: translateY(-2px);
-}
-
-.input-container {
-    display: flex;
-    gap: 10px;
-}
-
-.input-container input[type="text"] {
-    flex-grow: 1;
-    padding: 12px 15px;
-    border: 1px solid var(--primary-color);
-    border-radius: 10px;
-    font-size: 1em;
-    font-family: 'Mitr', sans-serif;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: var(--text-color);
-}
-
-.input-container button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 12px 20px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-.input-container button:hover {
-    background-color: var(--button-hover);
-}
-
-.progress-bar-container {
-    width: 100%;
-    height: 10px;
-    background-color: #eee;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-top: 10px;
-}
-
-.progress-bar {
-    height: 100%;
-    width: 0%;
-    background-color: var(--heart-color);
-    border-radius: 5px;
-    transition: width 0.5s ease-out;
-}
-
-.relationship-display {
-    text-align: center;
-    margin-top: 5px;
-    font-size: 0.9em;
-    color: var(--text-color);
-}
-
-.start-screen, .ending-screen {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    padding: 20px;
-    height: 100%;
+    justify-content: center;
     gap: 20px;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 25px;
+    width: 100%;
+    animation: slideUpFade 0.8s ease-out; /* แอนิเมชั่นตอนหน้าโผล่ขึ้นมา */
 }
 
-.start-screen h1 {
-    color: var(--primary-color);
-    font-size: 2.5em;
-    margin-bottom: 10px;
-}
-
-.start-screen p {
-    font-size: 1.1em;
-    max-width: 80%;
-}
-
-.start-screen .buttons button, .ending-screen .buttons button {
-    background-color: var(--primary-color);
+.festive-subtitle {
+    font-size: 1.8rem;
     color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    cursor: pointer;
-    margin: 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    margin: 10px 0;
 }
 
-.start-screen .buttons button:hover, .ending-screen .buttons button:hover {
-    background-color: var(--button-hover);
-    transform: translateY(-3px);
+.anniversary-title {
+    font-size: 2.2rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    font-weight: 700;
 }
 
-.start-screen .privacy-note {
-    font-size: 0.8em;
-    color: #777;
+/* --- แอนิเมชั่นน้องแมว --- */
+.sticker-bounce {
+    animation: softBounce 2s infinite ease-in-out;
+}
+
+.sticker-float {
+    animation: softFloat 3s infinite ease-in-out;
+}
+
+@keyframes softBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes softFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* --- แอนิเมชั่นการเปลี่ยนสไลด์ (Slide Up & Fade In) --- */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- ปุ่มกดสไตล์ใหม่ --- */
+.btn-pop {
+    background: #27ae60;
+    min-width: 120px;
+    font-weight: bold;
+    border: 3px solid rgba(255,255,255,0.3);
+    transition: transform 0.2s, background 0.3s;
+}
+
+.btn-pop:hover {
+    background: #2ecc71;
+    transform: scale(1.1);
+}
+
+.btn-chat {
+    background: #27ae60;
+    font-size: 1.5rem;
+    width: 80px;
+    height: 50px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 20px;
 }
 
-.ending-screen h2 {
-    color: var(--primary-color);
-    font-size: 2em;
-}
-
-.ending-screen pre {
-    background-color: #f4f4f4;
-    padding: 15px;
-    border-radius: 8px;
-    white-space: pre-wrap;
-    word-break: break-all;
-    max-height: 200px;
-    overflow-y: auto;
-    width: 90%;
-    text-align: left;
-    font-size: 0.9em;
-    border: 1px solid #ddd;
-}
-
-.back-button {
-    background-color: #ffb7b2; /* Lighter pink */
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5em;
+/* ทำให้ปุ่ม Anniversary อยู่ขวาล่างนิดๆ เหมือนในรูป */
+.btn-container {
+    width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+/* --- จัดหน้า Step 7 ให้สมดุล --- */
+.btn-center {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* จัดให้อยู่กึ่งกลาง */
+    margin-top: 30px;
+}
+
+/* --- ปุ่มกดแบบลางๆ (Subtle Button) --- */
+.btn-faint {
+    background: rgba(255, 255, 255, 0.15); /* พื้นหลังขาวจางๆ */
+    color: rgba(255, 255, 255, 0.7);      /* ตัวหนังสือขาวจางๆ */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* ขอบบางๆ */
+    padding: 10px 30px;
+    font-size: 0.9rem;
+    border-radius: 50px;
+    backdrop-filter: blur(3px);          /* ทำให้พื้นหลังดูเบลอๆ นวลๆ */
+    box-shadow: none;                    /* เอาเงาออกเพื่อให้ดูไม่เด่นเกินไป */
+    transition: all 0.3s ease;
     cursor: pointer;
-    position: absolute;
+}
+
+.btn-faint:hover {
+    background: rgba(255, 255, 255, 0.25); /* สว่างขึ้นนิดหน่อยตอนเอาเม้าส์วาง */
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);           /* ลอยขึ้นนิดเดียว */
+}
+
+.btn-faint:active {
+    transform: scale(0.95);
+}
+/* ปรับปรุงสไตล์ของรายการให้รองรับปุ่มลบที่อยู่ขวามือ */
+.live-item {
+    background: rgba(255, 255, 255, 0.9);
+    color: #c0392b;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    display: flex; /* ใช้ flex เพื่อจัดวางข้อความกับปุ่ม */
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    animation: slideIn 0.3s ease-out;
+}
+
+/* เพิ่ม icon เข็มหมุดหน้าข้อความ */
+.live-item span::before {
+    content: '📌';
+    margin-right: 10px;
+}
+
+/* สไตล์ปุ่มลบ (x) */
+.del-btn {
+    background: none;
+    border: none;
+    color: #cc0000;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 0 0 10px;
+    opacity: 0.5;
+    transition: 0.2s;
+}
+
+.del-btn:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* จัดการส่วนรายการให้เลื่อนได้สมูทขึ้น */
+.live-list {
+    width: 100%;
+    max-width: 350px;
+    margin: 10px auto;
+    max-height: 250px; /* เพิ่มความสูงให้เห็นรายการเยอะขึ้น */
+    overflow-y: auto;
+    padding: 5px;
+}
+/* --- ปุ่มเปิด-ปิดหิมะ (มุมขวาบน) --- */
+#snow-toggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 2000; /* ให้อยู่หน้าสุด */
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#snow-toggle:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+#snow-toggle.off {
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.5);
+}
+/* --- ปุ่มเริ่มใหม่แบบอยู่นอกกรอบ --- */
+.restart-btn-outer {
+    margin-top: 30px; /* เว้นระยะจากกรอบขาวลงมา */
+    background: rgba(255, 255, 255, 0.2); /* พื้นหลังขาวจางๆ */
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    backdrop-filter: blur(5px); /* พื้นหลังเบลอนิดๆ */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    animation: fadeIn 1s ease; /* ให้ค่อยๆ ปรากฏออกมา */
+}
+
+.restart-btn-outer:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.restart-btn-outer:active {
+    transform: scale(0.95);
+}
+
+/* ปรับปรุงกรอบการ์ดให้ไม่มีปุ่มข้างในแล้ว */
+.summary-card {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 30px; /* ทำให้ขอบมนสวยขึ้น */
+    color: #333;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    position: relative;
+}
+
+/* แก้ไขหัวข้อ Your 2026 Goals */
+.summary-card h1 {
+    color: #444;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+#auth-section {
+    position: fixed;
     top: 15px;
     left: 15px;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 2000;
 }
 
-.back-button:hover {
-    background-color: #ff8e8e;
-    transform: scale(1.05);
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .container {
-        width: 95%;
-        height: 95vh;
-        margin: 0;
-    }
-    .header h1 {
-        font-size: 1.5em;
-    }
-    .header p {
-        font-size: 0.8em;
-    }
-    .chat-bubble {
-        max-width: 90%;
-        padding: 10px 15px;
-    }
-    .choices-container button, .input-container input, .input-container button {
-        padding: 10px 12px;
-        font-size: 0.95em;
-    }
-    .start-screen h1 {
-        font-size: 2em;
-    }
-    .start-screen p {
-        font-size: 1em;
-    }
-    .start-screen .buttons button, .ending-screen .buttons button {
-        padding: 12px 25px;
-        font-size: 1.1em;
-    }
-}
-
-.character-display {
-    position: relative; /* เปลี่ยนจาก relative/flex เป็น absolute */
-    bottom: unset; /* จัดตำแหน่งให้อยู่เหนือ interaction-area และใต้ game-area */
-    left: unset;
-    transform: unset;
-    z-index: 20; /* ให้อยู่ด้านหน้า game-area และพื้นหลัง */
-    width: 100%; /* สามารถขยายได้ตามต้องการ */
-    max-width: 550px; /* จำกัดความกว้างไม่ให้ใหญ่เกินไป */
-    height: auto; /* ความสูงปรับตามรูปภาพ */
-    pointer-events: none; /* เพื่อให้คลิกผ่านไปยัง element ข้างล่างได้ */
-    display: flex; /* ใช้ flex เพื่อจัดกึ่งกลางรูปภาพด้านใน */
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 20px;
-    order: 2; 
-}
-
-.character-pose-image {
-    max-width: 100%; /* รูปภาพจะไม่เกินกรอบ */
-    height: auto;
-    object-fit: contain;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-}
-.character-pose-image.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* เพิ่ม CSS นี้ที่ส่วนท้ายของ style.css หรือรวมกับ start-screen/ending-screen styles */
-.name-input-screen {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    height: 100%;
-    gap: 20px;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 25px;
-}
-
-.name-input-screen h2 {
-    color: var(--primary-color);
-    font-size: 2em;
-    margin-bottom: 10px;
-}
-
-.name-input-screen p {
-    font-size: 1.1em;
-    max-width: 80%;
-}
-
-.name-input-screen input[type="text"] {
-    width: 80%;
-    max-width: 300px;
-    padding: 12px 15px;
-    border: 1px solid var(--primary-color);
-    border-radius: 10px;
-    font-size: 1em;
-    font-family: 'Mitr', sans-serif;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: var(--text-color);
-}
-
-.name-input-screen button {
-    background-color: var(--primary-color);
+#login-btn {
+    background: rgba(255, 255, 255, 0.2); /* ใสขาวจางๆ */
+    backdrop-filter: blur(5px);           /* เบลอหลังปุ่ม */
     color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.name-input-screen button:hover {
-    background-color: var(--button-hover);
-    transform: translateY(-3px);
-}
-
-#game-interface {
-    display: flex;
-    flex-direction: column; /* จัดองค์ประกอบแนวตั้ง */
-    height: 100%;
-    justify-content: flex-end; /* จัดเนื้อหาทั้งหมดไปอยู่ด้านล่าง */
-}
-/* สไตล์สำหรับภาพพื้นหลัง */
-.scene-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: 1; /* ให้พื้นหลังอยู่ด้านหลังสุด */
-    transition: background-image 1s ease-in-out, opacity 1s ease-in-out;
-    opacity: 0;
-}
-
-.scene-background.visible {
-    opacity: 1; /* แสดงภาพพื้นหลังเมื่อถูกตั้งค่า */
-}
-
-.game-area {
-    flex-grow: 1; /* ให้ game-area ยืดขยายเติมพื้นที่ที่เหลือทั้งหมด */
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    z-index: 5; /* Chat bubbles อยู่ด้านหน้าพื้นหลัง แต่หลังตัวละคร */
-    position: relative; /* ให้แน่ใจว่า z-index ทำงาน */
-    background-color: rgba(255, 255, 255, 0.7); /* เพิ่มพื้นหลังโปร่งแสงให้แชท เพื่อให้เห็นพื้นหลังได้แต่ยังอ่านข้อความง่าย */
-    border-radius: 15px; /* ทำให้ดูดีขึ้น */
-    padding-bottom: 20px; 
-    order: 0;
-}
-
-/* NEW: Interlude Screen Styles */
-.interlude-screen {
-    position: absolute; /* ให้ลอยอยู่เหนือหน้าจออื่น */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* พื้นหลังดำโปร่งแสง */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 30px;
-    box-sizing: border-box;
-    z-index: 1000; /* ให้อยู่ด้านบนสุด */
-    opacity: 0; /* เริ่มต้นซ่อนไว้ */
-    transition: opacity 1s ease-in-out; /* เพิ่ม transition */
-}
-
-.interlude-screen.visible {
-    opacity: 1; /* แสดงผล */
-}
-
-.interlude-screen h2 {
-    font-size: 3em; /* ขนาดใหญ่สำหรับชื่อตอน */
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.interlude-screen p {
-    font-size: 1.8em; /* ขนาดกลางสำหรับข้อความ */
-    line-height: 1.6;
-    max-width: 800px;
-}
-
-.interlude-screen button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    cursor: pointer;
-    margin-top: 30px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.interlude-screen button:hover {
-    background-color: var(--button-hover);
-    transform: translateY(-3px);
-}
-/* NEW: Final Ending Screen with full image */
-.final-ending-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* ซ่อนส่วนเกินของภาพ */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999; /* อยู่ใต้ interlude แต่ทับหน้าจอเกม */
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
-
-.final-ending-screen.visible {
-    opacity: 1;
-}
-
-.final-ending-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* ครอบคลุมพื้นที่ทั้งหมด, ตัดส่วนเกินออกถ้าจำเป็น */
-    object-position: center; /* จัดกึ่งกลางภาพ */
-    filter: brightness(0.7); /* ทำให้ภาพมืดลงเล็กน้อยเพื่อให้ข้อความอ่านง่ายขึ้น */
-}
-
-.final-ending-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    padding: 30px;
-    box-sizing: border-box;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* เพิ่มเงาให้ข้อความอ่านง่าย */
-}
-
-.final-ending-overlay h2 {
-    font-size: 3.5em; /* ชื่อตอนจบที่ใหญ่และเด่น */
-    margin-bottom: 20px;
-}
-
-.final-ending-overlay p {
-    font-size: 1.8em;
-    line-height: 1.6;
-    max-width: 800px;
-    margin-bottom: 40px;
-}
-
-.final-ending-overlay .buttons button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 15px 30px;
-    font-size: 1.2em;
-    cursor: pointer;
-    margin: 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.final-ending-overlay .buttons button:hover {
-    background-color: var(--button-hover);
-    transform: translateY(-3px);
-}
-/* NEW: Modal Styles for Memory Display */
-.modal {
-    display: flex; /* ใช้ flexbox เพื่อจัดกึ่งกลางเนื้อหา */
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1001; /* ให้อยู่บนสุดเหนือทุกองค์ประกอบ */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* เปิดใช้งานการเลื่อนหากเนื้อหาเกิน */
-    background-color: rgba(0, 0, 0, 0.6); /* พื้นหลังโปร่งแสง */
-    backdrop-filter: blur(5px); /* เพิ่มเอฟเฟกต์เบลอ */
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.modal.visible {
-    opacity: 1;
-}
-
-.modal-content {
-    background-color: white;
-    margin: auto;
-    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 15px;
     border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease-in-out;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Mali', cursive;
+}
+#login-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+/* ส่วนแสดงข้อมูล User เมื่อ Login แล้ว */
+#user-info {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-height: 80vh; /* จำกัดความสูงของ modal */
-    overflow-y: auto; /* ทำให้เนื้อหาภายใน modal สามารถเลื่อนได้ */
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    padding: 5px 12px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.modal.visible .modal-content {
-    transform: translateY(0);
+#user-pic {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-.modal-content h2 {
-    color: var(--primary-color);
+#user-name {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.logout-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 5px;
+    padding: 0;
+}
+
+.logout-btn:hover {
+    color: #ffadad;
+}
+
+#save-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+/* --- ปุ่ม Google แบบลางๆ สวยๆ --- */
+.google-btn-subtle {
+    /* พื้นหลังขาวจางๆ และเอฟเฟกต์เบลอ */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    
+    /* ขอบบางๆ ให้ดูพรีเมียม */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    /* ตัวหนังสือ */
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Mali', cursive;
+    font-size: 1rem;
+    font-weight: 500;
+    
+    /* ระยะห่างและการจัดวาง */
+    padding: 12px 25px;
+    border-radius: 15px; /* ความมนแบบพอดีๆ */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* ระยะห่างระหว่างกุญแจกับตัวอักษร */
+    
+    /* อนิเมชั่น */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* เอฟเฟกต์ตอนเอาเมาส์วาง (Hover) */
+.google-btn-subtle:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px); /* ลอยขึ้นนิดนึง */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* เอฟเฟกต์ตอนกด (Active) */
+.google-btn-subtle:active {
+    transform: scale(0.96); /* ยุบลงเล็กน้อย */
+}
+
+/* จัดให้ปุ่มในหน้าสุดท้ายวางคู่กัน */
+.final-buttons-container {
+    display: flex;
+    gap: 15px; /* ระยะห่างระหว่างปุ่ม */
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+}
+
+/* ปรับปรุงปุ่มเริ่มใหม่เดิม และใช้กับปุ่มบันทึกด้วย */
+.restart-btn-outer {
+    background: rgba(255, 255, 255, 0.2); /* พื้นหลังขาวใส */
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 12px 25px; /* ปรับขนาดให้พอดี */
+    border-radius: 50px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    backdrop-filter: blur(8px); /* เพิ่มความเบลอให้นวลขึ้น */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    white-space: nowrap; /* ป้องกันตัวอักษรตกบรรทัด */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.restart-btn-outer:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.restart-btn-outer:active {
+    transform: scale(0.95);
+}
+
+/* ปรับสไตล์ข้อความสถานะการบันทึกในกรอบขาว */
+#save-status {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    min-height: 1.2rem; /* ป้องกันกรอบขยับเวลาข้อความขึ้น */
+}
+/* เลเยอร์พื้นหลังสีดำจางๆ */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px); /* เบลอหลังจอ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* กล่องข้อความป็อปอัพ */
+.modal-box {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 25px;
     text-align: center;
-    font-size: 2em;
+    width: 85%;
+    max-width: 320px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.modal-icon {
+    font-size: 2.5rem;
     margin-bottom: 15px;
 }
 
-.close-button {
-    color: #aaa;
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
+#modal-text {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    font-weight: 500;
 }
 
-.close-button:hover,
-.close-button:focus {
-    color: var(--heart-color);
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#memory-details-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.memory-block {
-    background-color: var(--bubble-bg-player); /* สีเดียวกับ player bubble */
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    font-size: 0.95em;
-    line-height: 1.6;
-    border: 1px solid var(--primary-color);
-}
-
-.memory-block.player-response {
-    background-color: var(--bubble-bg-npc); /* สีสลับกันเพื่อแยก player/npc */
-    border: 1px solid var(--secondary-color);
-}
-
-.memory-block strong {
-    color: var(--primary-color);
-}
-
-.modal-button {
-    background-color: var(--primary-color);
+/* ปุ่มตกลงในป็อปอัพ */
+.modal-close-btn {
+    background: #c0392b;
     color: white;
     border: none;
-    border-radius: 15px;
-    padding: 12px 25px;
-    font-size: 1.1em;
+    padding: 10px 40px;
+    border-radius: 50px;
+    font-size: 1rem;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.modal-close-btn:hover {
+    background: #e74c3c;
+    transform: scale(1.05);
+}
+
+/* แอนิเมชั่นตอนเด้งขึ้นมา */
+.animate-pop {
+    animation: modalShow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalShow {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
+}
+/* ฉากพื้นหลังโทนอุ่น 1080x1920 */
+.emotional-scene {
+    background-image: url('images/warm_bg.jpg'); /* ใส่ชื่อรูปพื้นหลังของคุณ */
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+
+.emotional-content {
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    padding-bottom: 50px; /* เว้นที่ให้ปุ่มด้านล่าง */
+}
+
+/* ข้อความพิมพ์ทีละบรรทัด */
+.typing-wrapper {
     margin-top: 20px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    align-self: center; /* จัดกึ่งกลางปุ่ม */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    min-height: 120px; /* กันเนื้อหาขยับ */
 }
 
-.modal-button:hover {
-    background-color: var(--button-hover);
-    transform: translateY(-2px);
+.typewriter-text {
+    font-size: 1.4rem;
+    color: #ffffff; /* ฟอนต์สีขาว */
+    margin-bottom: 12px;
+    font-weight: 500;
+    /* เพิ่มเงาฟุ้งๆ ให้ตัวหนังสือสีขาวอ่านง่ายขึ้นบนพื้นหลังสว่าง */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); 
+    line-height: 1.6;
 }
-/* General Mobile Adjustments */
-@media (max-width: 768px) {
-    body {
-        overflow-y: auto; /* Allow scrolling on body if content exceeds viewport */
-        min-height: 100vh; /* Ensure body takes full height */
-        align-items: flex-start; /* Start content from top, not center */
-        padding: 10px 0; /* Add some vertical padding */
-    }
 
-    .container {
-        width: 98%; /* Slightly wider */
-        max-width: none; /* Remove max-width for smaller screens */
-        height: auto; /* Allow height to adjust dynamically */
-        min-height: 95vh; /* Ensure minimum height for container */
-        border-radius: 15px; /* Smaller border radius */
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    }
+/* ปรับปุ่มไปต่อให้เข้ากับหน้า */
+#go-together-btn {
+    margin-top: 30px;
+    background: #8d6e63;
+    border: 1px solid rgba(255,255,255,0.3);
+}
 
-    /* Game Interface specific adjustments */
-    #game-interface {
-        height: 100%; /* Ensure game interface takes full height of container */
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* Pushes header to top, interaction to bottom */
-    }
+/* ซ่อนปุ่มเริ่มใหม่ในหน้าสุดท้ายตามสั่ง */
+/* (เราใช้คลาส restart-btn-outer เดิมแต่เปลี่ยนชื่อหรือจุดประสงค์ปุ่มใน HTML แล้ว) */
+/* จัดการกล่องใส่รูปในหน้า Checklist */
+.checklist-img-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* เว้นระยะห่างจากช่องพิมพ์ */
+}
 
-    .header {
-        padding: 10px 15px;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-    }
+.checklist-main-img {
+    width: 150px; /* ปรับขนาดความกว้างตามต้องการ */
+    height: auto;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); /* เพิ่มเงาให้รูปดูมีมิติ */
+    animation: float 3s infinite ease-in-out; /* ให้รูปลอยขึ้นลงเบาๆ เหมือนหน้าแรก */
+}
 
-    .header h1 {
-        font-size: 1.4em; /* Smaller title */
-    }
 
-    .header .relationship-display {
-        font-size: 0.8em;
-    }
+/* ฉากแฟนตาซี 1080x1920 */
+.fantasy-scene {
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-    .back-button {
-        width: 35px;
-        height: 35px;
-        font-size: 1.2em;
-        top: 10px;
-        left: 10px;
-    }
+.narrative-container {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    width: 85%;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
 
-    .scene-background {
-        /* If using full-height background, ensure it works with dynamic container height */
-        height: 100%; /* Take full height of parent (.container) */
-    }
+.character-img {
+    width: 220px;
+    height: auto;
+    margin-bottom: 20px;
+}
 
-    .game-area {
-        flex-grow: 1; /* Still takes available space */
-        padding: 15px;
-        min-height: 200px; /* Ensure a minimum height for chat area */
-        /* Remove fixed padding-bottom here if character-display is absolute */
-        padding-bottom: 15px; /* Adjust as needed, less than before */
-        background-color: rgba(255, 255, 255, 0.85); /* Make chat area slightly more opaque */
-    }
+.dialogue-box {
+    width: 90% !important;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    position: relative;
+}
 
-    .chat-bubble {
-        max-width: 95%; /* Wider bubbles on small screens */
-        padding: 10px 15px;
-        font-size: 0.9em;
-    }
+/* ปุ่มตัวเลือก */
+.choice-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+}
 
-    .interaction-area {
-        padding: 10px 15px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
-        box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
-    }
+.choice-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    padding: 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+    font-family: 'Mali', cursive;
+}
 
-    .choices-container button {
-        padding: 10px 12px;
-        font-size: 0.9em;
-        margin-bottom: 6px;
-        border-radius: 8px;
-    }
+.choice-btn:hover {
+    background: white;
+    color: #c0392b;
+}
 
-    .input-container input[type="text"] {
-        padding: 10px 12px;
-        font-size: 0.9em;
-        border-radius: 8px;
-    }
+/* เอฟเฟกต์ดาวลอย */
+.magic-star {
+    position: absolute;
+    font-size: 1.5rem;
+    pointer-events: none;
+    animation: starFade 2s forwards;
+}
 
-    .input-container button {
-        padding: 10px 15px;
-        font-size: 0.9em;
-        border-radius: 8px;
-    }
+@keyframes starFade {
+    0% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: scale(1.5) rotate(180deg) translateY(-100px); opacity: 0; }
+}
+/* --- แก้ไขการจัดวางหน้าแฟนตาซีให้ตรงกลาง --- */
 
-    /* Character Display - IMPORTANT for mobile */
-    .character-display {
-        position: absolute; /* Change to absolute positioning */
-        bottom: 80px; /* Adjust this value to place it above interaction-area */
-        left: 50%;
-        transform: translateX(-50%); /* Center horizontally */
-        width: 100%; /* Take full width for centering, but image itself should be max-width */
-        max-width: 400px; /* Limit overall character display width */
-        height: auto;
-        pointer-events: none; /* Crucial: allows clicking through to choices/input */
-        z-index: 20; /* Ensure it's above game-area */
-        padding-bottom: 0; /* No need for padding-bottom here if bottom is set */
-        display: flex; /* Keep flex for centering the image */
-        justify-content: center;
-        align-items: flex-end;
-    }
+.fantasy-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* จัดทุกอย่าง (แมว, กล่องคำพูด, ปุ่ม) ให้อยู่กึ่งกลางแนวนอน */
+    width: 100%;
+}
 
-    .character-pose-image {
-        max-width: 80%; /* Limit image width to prevent it from being too big */
-        max-height: 200px; /* Set a max height for character image on mobile */
-        object-fit: contain;
-    }
+.dialogue-box {
+    width: 85% !important; /* ปรับขนาดให้เหมาะสม */
+    margin: 0 auto 20px auto !important; /* บังคับให้อยู่กลางและเว้นระยะล่าง */
+    text-align: center; /* จัดตัวหนังสือในกล่องให้กลาง */
+}
 
-    /* Start/Ending/Name Input Screens */
-    .start-screen, .ending-screen, .name-input-screen {
-        padding: 15px;
-        gap: 15px;
-    }
+.choice-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* บังคับให้ปุ่มภายในจัดวางตรงกลาง */
+    justify-content: center;
+    width: 100%;
+    gap: 12px;
+}
 
-    .start-screen h1, .name-input-screen h2 {
-        font-size: 1.8em;
-    }
+.choice-btn {
+    width: 85%; /* ให้ความกว้างปุ่มเท่าๆ กับกล่องข้อความด้านบน */
+    max-width: 320px; /* จำกัดความกว้างไม่ให้บานเกินไปในจอคอม */
+    text-align: center;
+    margin: 0 auto; /* กันเหนียว จัดกลางด้วย margin */
+}
+/* แอนิเมชั่นแมวเลื่อนขึ้นจากล่าง */
+.slide-up-cat {
+    animation: slideUpIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    position: relative;
+}
 
-    .start-screen p, .name-input-screen p {
-        font-size: 0.9em;
-    }
+@keyframes slideUpIn {
+    from { transform: translateY(100vh); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
 
-    .start-screen .buttons button, .ending-screen .buttons button, .name-input-screen button {
-        padding: 10px 20px;
-        font-size: 1em;
-        margin: 8px;
-        border-radius: 10px;
-    }
+.go-text {
+    font-size: 3rem;
+    color: #f1c40f;
+    text-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
+    margin: 20px 0;
+}
 
-    .start-screen .privacy-note {
-        font-size: 0.75em;
-    }
+/* ของวิเศษ Step F3 */
+.items-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    width: 90%;
+}
+.magic-icon-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+.magic-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 20px;
+    width: 140px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    /* Interlude Screen */
-    .interlude-screen {
-        padding: 20px;
-    }
-    .interlude-screen h2 {
-        font-size: 2em;
-    }
-    .interlude-screen p {
-        font-size: 1.2em;
-    }
-    .interlude-screen button {
-        padding: 12px 25px;
-        font-size: 1.1em;
-    }
+.magic-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px);
+}
 
-    /* Final Ending Screen */
-    .final-ending-overlay h2 {
-        font-size: 2.5em;
-    }
-    .final-ending-overlay p {
-        font-size: 1.3em;
-    }
-    .final-ending-overlay .buttons button {
-        padding: 12px 25px;
-        font-size: 1.1em;
-    }
+.item-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+}
 
-    /* Memory Modal */
-    .modal-content {
-        width: 95%;
-        padding: 20px;
-        border-radius: 15px;
-        gap: 15px;
-        max-height: 90vh; /* Allow more height for modal content */
+.magic-item p {
+    font-size: 0.85rem;
+    color: white;
+}
+/* ตัวบอกให้กดไปต่อ จางๆ */
+.click-hint {
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.4); /* สีดำจางๆ */
+    display: block;
+    margin-top: 8px;
+    font-weight: normal;
+    animation: pulseHint 2s infinite; /* กะพริบเบาๆ */
+    text-align: right; /* ชิดขวาดูเรียบร้อย */
+}
+
+@keyframes pulseHint {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
+/* ปรับให้ dialogue-box รองรับการใส่ข้อความหลายบรรทัดภายใน */
+.dialogue-box {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer; /* เปลี่ยนเมาส์เป็นรูปมือให้รู้ว่ากดได้ */
+}
+/* ตรวจสอบว่ามี CSS ส่วนนี้เพื่อให้รายการดูสวยงาม */
+.live-item {
+    background: rgba(255, 255, 255, 0.9);
+    color: #c0392b;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+}
+
+.live-item span::before {
+    content: '⭐'; /* เปลี่ยนจากเข็มหมุดเป็นดาวให้เข้ากับหน้าแฟนตาซี */
+    margin-right: 8px;
+}
+
+/* ปรับแต่งหน้า Step F6 (Happy Ending) */
+#stepF6 {
+    background: #c0392b !important; /* สีแดงหลักของเว็บ */
+    min-height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+/* หัวข้อ Happy Ending */
+#stepF6 .festive-title {
+    color: white;
+    font-size: 2.8rem;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* ปรับปรุงตัวการ์ดข้อความ */
+#stepF6 .card-container {
+    width: 320px;
+    height: 450px;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+    animation: floatingCard 3s infinite ease-in-out;
+}
+
+@keyframes floatingCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* ปรับสีพื้นหลังด้านหลังการ์ดให้ออกขาวนวลเหมือนกระดาษพรีเมียม */
+#stepF6 .card-back {
+    background: #fffcf5; /* ขาวนวลเหมือนกระดาษถนอมสายตา */
+    border: 8px solid #f1c40f; /* ขอบทองบางๆ */
+    padding: 35px 25px;
+}
+
+#stepF6 .card-text h2 {
+    color: #c0392b;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #f1c40f;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+#stepF6 .card-text p {
+    color: #444;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+/* ปรับปุ่มเริ่มใหม่ให้เข้ากับสีแดง */
+#stepF6 .restart-btn-outer {
+    margin-top: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    backdrop-filter: blur(10px);
+    padding: 12px 40px;
+    font-size: 1rem;
+}
+
+#stepF6 .restart-btn-outer:hover {
+    background: white;
+    color: #c0392b;
+}
+
+/* เพิ่มแอนิเมชั่นพายุจางๆ */
+@keyframes shakeStorm {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+}
+
+.storm-active {
+    animation: shakeStorm 0.5s infinite;
+}
+
+.magic-icon-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+}
+/* แอนิเมชั่นสำหรับการเลื่อนจากขวามาตรงกลาง */
+@keyframes slideFromRight {
+    0% {
+        transform: translateX(100vw); /* เริ่มต้นนอกจอด้านขวา */
+        opacity: 0;
     }
-    .modal-content h2 {
-        font-size: 1.5em;
+    100% {
+        transform: translateX(0); /* มาหยุดที่ตำแหน่งปกติ (ตรงกลาง) */
+        opacity: 1;
     }
-    .memory-block {
-        padding: 12px;
-        font-size: 0.85em;
-        border-radius: 10px;
-    }
-    .modal-button {
-        padding: 10px 20px;
-        font-size: 1em;
-    }
+}
+
+/* ใส่แอนิเมชั่นให้กับคลาส sticker-img-move */
+.sticker-img-move {
+    width: 200px; /* ปรับขนาดตามความเหมาะสม */
+    height: auto;
+    margin-bottom: 20px;
+    /* เรียกใช้แอนิเมชั่น: ชื่อ | เวลา | จังหวะ (ค่อยๆ ช้าลง) | ค้างไว้ที่เฟรมสุดท้าย */
+    animation: slideFromRight 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* เพิ่มเติม: ทำให้พื้นที่จัดส่งไม่มีแถบเลื่อนแนวนอนตอนแมววิ่งมา */
+#step4 {
+    overflow-x: hidden;
+    width: 100%;
 }
